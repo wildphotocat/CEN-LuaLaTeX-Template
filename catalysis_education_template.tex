@@ -1,0 +1,604 @@
+% !TEX program = lualatex
+\documentclass[10pt, a4paper]{article}
+\usepackage{siunitx}
+
+% =========================================
+% CATALYSIS EDUCATION NEWSLETTER TEMPLATE
+% Version: 4.0 (January 2026)
+% =========================================
+
+% ---- 1. GEOMETRY & LAYOUT ----
+\usepackage[top=2.8cm, bottom=2.5cm, left=1.5cm, right=1.5cm, headheight=2cm]{geometry}
+
+\usepackage{fontspec}
+\usepackage{hologo}
+\usepackage{enumitem}
+\usepackage[switch]{lineno} % line numbers for review
+
+
+% Compact list spacing (journal-like)
+\setlist[itemize]{topsep=0.25\baselineskip, itemsep=0pt, parsep=0pt, partopsep=0pt}
+\setlist[enumerate]{topsep=0.25\baselineskip, itemsep=0pt, parsep=0pt, partopsep=0pt}
+
+% Main body font (serif)
+\setmainfont{TeX Gyre Termes} % Times-like, matches academic style
+\newfontfamily\sourceserif{Source Serif 4}[
+UprightFeatures={OpticalSize=Auto},
+BoldFeatures={OpticalSize=Auto},
+ItalicFeatures={OpticalSize=Auto},
+BoldItalicFeatures={OpticalSize=Auto}
+]
+% Sans-serif font for headings
+\setsansfont[
+BoldFont = {TeX Gyre Heros Bold},
+ItalicFont = {TeX Gyre Heros Italic},
+BoldItalicFont = {TeX Gyre Heros Bold Italic}
+]{TeX Gyre Heros}
+
+% Monospace
+\setmonofont{TeX Gyre Cursor}
+
+\usepackage{tcolorbox}
+\usepackage{amsmath, amsthm,amssymb}
+\usepackage[warnings-off={mathtools-colon}]{unicode-math}
+
+% STIX Two Math does not provide a true bold math face; define a bold
+% math *version* using FakeBold instead of requesting a TU/.../b/n shape.
+\setmathfont{STIX Two Math}
+\setmathfont[version=bold,FakeBold=2]{STIX Two Math}
+
+\setlength{\columnsep}{1.5em}
+
+% Avoid vertical stretching that can create visible "white bands"
+\raggedbottom
+\emergencystretch=2em % reduce overfull lines in narrow columns
+
+% Paragraph spacing (keep compact, journal-like)
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{1.2em}
+
+% ---- 2. TABLES ----
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage[font={small,sf,bf}, labelfont={color=catalysisblue}]{caption}
+% --- CUSTOM STYLES ---
+% Define a new column type 'L' that is a ragged-right version of 'X'
+\newcolumntype{L}{>{\RaggedRight\arraybackslash}X}
+
+% ---- 3. COLORS ----
+\usepackage[table]{xcolor}
+% Define "Nature Reviews" style colors
+\definecolor{natureblue}{RGB}{0, 65, 101}   % Deep, professional blue for headers
+\definecolor{naturelight}{RGB}{240, 248, 255} % Very light blue for alternating rows
+\definecolor{rulecolor}{RGB}{0, 65, 101}    % Color for the horizontal lines
+
+% Caption style (after colors are defined)
+\captionsetup[table]{
+	labelfont={bf, color=natureblue}, % Color the label (Table 1)
+	textfont={bf},
+	position=top,
+	skip=6pt,
+	justification=justified,
+	singlelinecheck=false
+}
+
+\definecolor{catalysisblue}{RGB}{0, 51, 102}    % NCCR Deep Blue
+\definecolor{accentgray}{RGB}{100, 100, 100}
+\definecolor{orcidgreen}{RGB}{166, 206, 57}     % ORCID color
+\definecolor{OAorange}{HTML}{F39200}            % Open Access color
+\definecolor{contextbg}{RGB}{240, 245, 250}     % Light blue for context
+\definecolor{highlightbg}{RGB}{255, 251, 230}   % Light yellow for highlights
+\definecolor{notebg}{RGB}{230, 245, 255}        % Light blue for notes
+\definecolor{warningbg}{RGB}{255, 240, 240}     % Light red for warnings
+\definecolor{conceptbg}{RGB}{240, 255, 240}     % Light green for concepts
+
+% ---- 4. CHEMISTRY PACKAGES ----
+\usepackage[version=4]{mhchem}     % Chemical formulas: \ce{H2O}
+\usepackage{chemfig}               % Chemical structures
+\usepackage{chemmacros}            % Additional chemistry macros
+
+% ---- 5. SECTIONS STYLING ----
+\usepackage{titlesec}
+\usepackage{needspace}
+\usepackage{etoolbox}
+\pretocmd{\section}{\Needspace{5\baselineskip}}{}{} % avoid section titles at bottom of column
+\setcounter{secnumdepth}{3} % show section/subsection/subsubsection numbering
+\titleformat{\section}{\color{catalysisblue}\large\sffamily\bfseries}{\thesection.}{0.5em}{\RaggedRight}
+
+% Run-in headings so the paragraph starts right after the title.
+\titleformat{\subsection}[runin]{\color{catalysisblue}\normalsize\bfseries}{\thesubsection.}{0.3em}{}[.]
+\titleformat{\subsubsection}[runin]{\color{catalysisblue}\small\bfseries}{\thesubsubsection.}{0.3em}{}[.]
+
+% Tighter heading spacing for 10pt layout
+\titlespacing*{\section}{0pt}{0.8\baselineskip}{0.4\baselineskip}
+\titlespacing*{\subsection}{0pt}{0.6\baselineskip}{0.25em}
+\titlespacing*{\subsubsection}{0pt}{0.5\baselineskip}{0.25em}
+
+% ---- 6. IMAGES ----
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{float}
+% caption already loaded above
+\usepackage[
+protrusion=true,
+expansion=true,
+tracking=true
+]{microtype}
+
+% ---- 7. BIBLIOGRAPHY (ACS STYLE) ----
+\usepackage[numbers,super,sort&compress]{natbib}
+\setlength{\bibsep}{0pt plus 0.3ex}
+
+% ---- 8. LINKS & HYPERREF ----
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=catalysisblue,
+	urlcolor=catalysisblue,
+	citecolor=catalysisblue
+}
+
+% ---- 9. ORCID INTEGRATION ----
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows.meta, positioning, fit, backgrounds, shadows}
+
+% Command for ORCID with link
+\newcommand{\orcid}[1]{%
+	\href{https://orcid.org/#1}{\raisebox{-0.2ex}{\includegraphics[height=1.6ex]{orcid.pdf}}}%
+}
+
+% ---- 10. SOCIAL LINKS ----
+\usepackage{fontawesome5}  % For icons (requires XeLaTeX/LuaLaTeX)
+
+% ---- 11. HIGHLIGHT BOXES ----
+% Concept box (light green)
+\newtcolorbox{conceptbox}{
+	colback=conceptbg,
+	colframe=catalysisblue,
+	boxrule=1pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	fontupper=\small
+}
+
+% Important note box (light blue)
+\newtcolorbox{notebox}{
+	colback=notebg,
+	colframe=catalysisblue,
+	boxrule=1pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	fontupper=\small
+}
+
+% Highlight box (light yellow)
+\newtcolorbox{highlightbox}{
+	colback=highlightbg,
+	colframe=accentgray,
+	boxrule=1pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	fontupper=\small
+}
+
+% Warning/Caution box (light red)
+\newtcolorbox{cautionbox}{
+	colback=warningbg,
+	colframe=red!70!black,
+	boxrule=1pt,
+	arc=3pt,
+	left=8pt,
+	right=8pt,
+	top=8pt,
+	bottom=8pt,
+	fontupper=\small
+}
+
+% ---- 12. METADATA VARIABLES & HEADER CONFIG ----
+\usepackage{fancyhdr}
+\makeatletter % START: Allow use of @ variables
+
+% Define variables
+\newcommand{\articletype}[1]{\def\@articletype{#1}}
+\newcommand{\malar}[1]{\def\@malar{#1}}
+\newcommand{\petal}[1]{\def\@petal{#1}}
+\newcommand{\yearval}[1]{\def\@yearval{#1}}
+\newcommand{\editor}[1]{\def\@editor{#1}}
+\newcommand{\affiliation}[1]{\def\@affiliation{#1}}
+\newcommand{\keywords}[1]{\def\@keywords{#1}}
+\newcommand{\tocimage}[1]{\def\@tocimage{#1}}
+\newcommand{\doi}[1]{\def\@doi{#1}}
+\def\@readonline{} % optional: URL to HTML/online version
+\newcommand{\readonline}[1]{\def\@readonline{#1}}
+\def\@citethis{} % optional: citation line for title block
+\newcommand{\citethis}[1]{\def\@citethis{#1}}
+
+% ---- DEFINE PAGE STYLES ----
+% Style for first page (with logo, WITH DOI in footer)
+\fancypagestyle{firstpage}{
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{1pt}
+	\renewcommand{\headrule}{\hbox to\headwidth{\color{accentgray}\leaders\hrule height \headrulewidth\hfill}}
+	
+	% Header: Logo Center
+	\chead{\includegraphics[height=1.5cm, keepaspectratio]{logodec_updated}}
+	
+	% Header: Open Access badge (right, above header rule)
+	\rhead{\sffamily\footnotesize\colorbox{OAorange}{\textcolor{white}{\strut\,Open Access\,}}}
+	
+	% Footer - Two lines with DOI
+	\lfoot{%
+		\parbox[b]{0.6\textwidth}{%
+			\sffamily \small \color{catalysisblue} 
+			Catalysis Education Newsletter, Malar \@malar, Petal \@petal, \@yearval\\
+			\sffamily \footnotesize \color{black} 
+			\textbf{DOI}: \href{https://doi.org/\@doi}{\@doi}%
+		}%
+	}
+	\rfoot{\sffamily\bfseries \thepage}
+	
+	\renewcommand{\footrulewidth}{0.5pt}
+}
+
+% Style for content pages (with logo and DOI on separate line)
+\fancypagestyle{contentpage}{
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{1pt}
+	\renewcommand{\headrule}{\hbox to\headwidth{\color{accentgray}\leaders\hrule height \headrulewidth\hfill}}
+	
+	% Header: Logo Center
+	\chead{\includegraphics[height=1.5cm, keepaspectratio]{logodec_updated}}
+	
+	% Footer - Two lines: Issue info on first line, DOI on second line
+	\lfoot{%
+		\parbox[b]{0.6\textwidth}{%
+			\sffamily \small \color{catalysisblue} 
+			Catalysis Education Newsletter, Malar \@malar, Petal \@petal, \@yearval\\
+			\sffamily \footnotesize \color{black} 
+			\textbf{DOI}: \href{https://doi.org/\@doi}{\@doi}%
+		}%
+	}
+	\rfoot{\sffamily\bfseries \thepage}
+	\renewcommand{\footrulewidth}{0.5pt}
+}
+
+% ---- CUSTOM TITLE BLOCK (CENTERED) ----
+\renewcommand{\maketitle}{
+	\thispagestyle{firstpage}
+	
+	\begin{center}
+		% Article Type Badge
+		{\sffamily \bfseries \footnotesize \color{white} \colorbox{catalysisblue}{\,\MakeUppercase{\@articletype}\,}}
+		
+		\vspace{0.15cm}
+		
+		% Title
+		{\LARGE \sffamily \bfseries \color{catalysisblue} \@title \par}
+		
+		\vspace{0.2cm}
+		
+		% Author with ORCID and social links
+		{\large \@author \par}
+		
+		\vspace{0.15cm}
+		
+		% Affiliations
+		{\small \itshape \@affiliation \par}
+		
+		% Cite This (left) + Read Online (right)
+		\vspace{0.15cm}
+		{\sffamily\footnotesize
+			\begin{tabular}{@{}l@{\hspace{5em}}l@{}}
+				\ifx\@citethis\@empty\else\textbf{Cite This:}~\@citethis\fi &
+				\ifx\@readonline\@empty\else
+				\begingroup\bfseries
+				\href{\@readonline}{\tcbox[
+					colback=white,
+					colframe=catalysisblue,
+					boxrule=0.6pt,
+					arc=2mm,
+					left=4pt,
+					right=4pt,
+					top=1.5pt,
+					bottom=1.5pt,
+					boxsep=0pt,
+					on line
+					]{\textcolor{catalysisblue}{\strut Read Online}}}%
+				\endgroup\fi\\
+			\end{tabular}
+		}
+	\end{center}
+	
+	% Horizontal rule
+	{\color{accentgray}\hrule height 0.5pt}
+	
+	% Copyright/licensing (top-right, below rule)
+	\vspace{0.1cm}
+	\noindent\hfill{\footnotesize\sffamily
+		\includegraphics[height=1.6ex]{ccby.pdf}\hspace{0.4em}This article is licensed under CC BY-NC 4.0
+	}\par
+	\vspace{0.12cm}
+}
+
+% ---- BROADER CONTEXT BOX (Editorial Commentary) ----
+\newenvironment{broadercontext}{%
+	\begin{tcolorbox}[
+		colback=contextbg,
+		colframe=catalysisblue,
+		boxrule=1pt,
+		arc=3pt,
+		left=8pt,
+		right=8pt,
+		top=8pt,
+		bottom=8pt,
+		width=\textwidth
+		]
+		\small
+		\noindent\textbf{\sffamily\color{catalysisblue}Broader Context}\par
+		\vspace{0.1cm}
+	}{%
+	\end{tcolorbox}
+	\vspace{0.2cm}
+}
+
+\makeatother % END
+
+% Set default page style
+\pagestyle{contentpage}
+
+% =========================================
+% FILL IN YOUR ARTICLE INFORMATION
+% =========================================
+
+\malar{1}                          % Volume number
+\petal{1}                          % Issue number
+\yearval{2026}                     % Publication year
+\articletype{Educational Article}  % Options: Educational Article, Concept Note, Paper Commentary, Teaching Material
+
+% ARTICLE METADATA
+\title{Your Article Title Goes Here: A Guide to Effective Catalysis Research Communication}
+
+% AUTHORS with affiliations, ORCID, and social links
+\author{%
+	\textbf{Jane A. Doe}\textsuperscript{1\,\href{mailto:jane.doe@university.edu}{\faEnvelope}} 
+	\orcid{0000-0000-0000-0001}
+	\href{https://scholar.google.com/citations?user=XXXXXX}{\small \faGraduationCap} 
+	\href{https://www.linkedin.com/in/jane-doe}{\small \faLinkedin}, 
+	\textbf{John B. Smith}\textsuperscript{2\,\href{mailto:john.smith@institute.org}{\faEnvelope}} 
+	\orcid{0000-0000-0000-0002}
+	\href{https://scholar.google.com/citations?user=YYYYYY}{\small \faGraduationCap} 
+	\href{https://www.linkedin.com/in/john-smith}{\small \faLinkedin}
+}
+
+% Affiliations (will be centered)
+\affiliation{%
+	\textsuperscript{1}Department of Chemistry, Example University, City, Country \\
+	\textsuperscript{2}Research Institute for Catalysis, Institution Name, City, Country
+}
+
+\keywords{catalysis, heterogeneous catalysis, reaction mechanisms, surface chemistry, characterization}
+\doi{10.xxxx/zenodo.xxxxxxxx}        % DOI (will be assigned by editorial team)
+\citethis{\textcolor{catalysisblue}{\textit{Catal. Educ. Newsl.} 2026, 1 (1), xx--xx}}
+\readonline{https://catalysiseducation.substack.com/} % Online/HTML version URL
+
+% =========================================
+% DOCUMENT BEGINS
+% =========================================
+
+\begin{document}
+	\setcounter{page}{1}
+	\linenumbers
+	\maketitle
+	
+	% =========================================
+	% FIRST PAGE: Abstract, Keywords, Broader Context
+	% =========================================
+	
+	% ABSTRACT
+	\noindent
+	\textbf{\sffamily\color{catalysisblue}Abstract}
+	
+	\vspace{0.1cm}
+	
+	\noindent
+	\small
+	This is where your abstract goes. The abstract should be a concise summary of your article, typically 150-250 words. It should clearly state the purpose, methodology, main findings, and significance of your work. Avoid citations in the abstract and focus on the key messages you want readers to take away from your article.
+	\vspace{0.3cm}
+	
+	% KEYWORDS
+	\noindent
+	{\small\textbf{\sffamily\color{catalysisblue}Keywords:} catalysis, heterogeneous catalysis, reaction mechanisms, surface chemistry, characterization}
+	
+	\vspace{0.3cm}
+	
+	% BROADER CONTEXT (Editorial Commentary)
+	\begin{broadercontext}
+		The Broader Context section provides editorial commentary on why this work matters to the catalysis education community. This section helps readers understand the significance and relevance of the article within the broader field of catalysis research and education. It is typically written by the editors to highlight connections to current challenges, emerging trends, or educational needs in the field.
+	\end{broadercontext}
+	
+	% =========================================
+	% PAGE BREAK - Content starts on next page
+	% =========================================
+	
+	\newpage
+	
+	% =========================================
+	% MAIN CONTENT (TWO-COLUMN FROM HERE TO END)
+	% =========================================
+	
+	\twocolumn
+	
+	\section{Author Guidelines}
+	
+	Welcome to the Catalysis Education Newsletter LaTeX template. This document serves as both a template and a comprehensive guide for preparing your manuscript.
+	
+	\subsection{Compilation Requirements} This template requires LuaLaTeX for compilation. Ensure you have the following packages installed: fontspec, unicode-math, mhchem (version 4), chemfig, chemmacros, tcolorbox, fontawesome5, natbib, and hyperref. The template uses TeX Gyre fonts (Termes, Heros, Cursor) and STIX Two Math, which are available in modern TeX distributions.
+	
+	\subsection{Article Types} The newsletter accepts four types of contributions: Educational Articles (comprehensive tutorials or reviews), Concept Notes (focused explanations of specific concepts), Paper Commentary (analysis of recent important publications), and Teaching Material (resources for catalysis education). Specify your article type using the \texttt{\textbackslash articletype\{\}} command.
+	
+	\section{Manuscript Preparation}
+	
+	\subsection{Title and Authors} Provide a clear, descriptive title that accurately reflects your content. List all authors with their full names, affiliations, and contact information. Each author must provide their ORCID ID, email address, Google Scholar profile, and LinkedIn profile URL. Use superscript numbers to link authors to their affiliations.
+	
+	\subsection{Abstract and Keywords} The abstract should be 150-250 words and provide a self-contained summary of your work. Do not include citations in the abstract. Provide 5-8 keywords that accurately describe your article's content. Keywords should be specific to catalysis and help readers find your work.
+	
+	\subsection{Broader Context} The Broader Context section is written by the editorial team. Authors may suggest content for this section, but the final text will be determined by the editors to ensure consistency across the newsletter.
+	
+	\section{Formatting Guidelines}
+	
+	\subsection{Two-Column Layout} The main content begins on page 2 in a two-column format. This is automatically handled by the \texttt{\textbackslash twocolumn} command. All sections from Introduction through Conclusions should be in two columns.
+	
+	\subsection{Chemical Formulas} Use the mhchem package for chemical formulas. For example, water is written as \ce{H2O}, sulfuric acid as \ce{H2SO4}, and reactions like \ce{2H2 + O2 -> 2H2O}. For complex structures, use the chemfig package. Ensure all chemical notation follows IUPAC conventions.
+	
+	\subsection{Equations} Number important equations and reference them in the text. Use the \texttt{equation} environment for single equations and \texttt{align} for multiple related equations. For example:
+	
+	\begin{equation}
+		k = A e^{-E_a/RT}
+	\end{equation}
+	
+	This is the Arrhenius equation where $k$ is the rate constant, $A$ is the pre-exponential factor, $E_a$ is the activation energy, $R$ is the gas constant, and $T$ is temperature.
+	
+	\section{Figures and Tables}
+	
+	\subsection{Figure Placement} Use the \texttt{figure*} environment for full-width figures that span both columns. For single-column figures, use the standard \texttt{figure} environment. All figures must have descriptive captions and be referenced in the text.
+	
+	Example figure code:
+	\begin{verbatim}
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.8\textwidth]
+    {your_figure.pdf}
+  \caption{Your descriptive caption here.}
+  \label{fig:example}
+\end{figure*}
+	\end{verbatim}
+	
+	\subsection{Table Formatting} Tables should use the booktabs package for professional appearance. Use \texttt{table*} for full-width tables. Include clear column headers and units where applicable. Reference tables in the text as Table~1, Table~2, etc.
+	
+	\section{Special Features}
+	
+	\subsection{Colored Boxes} The template provides four types of colored boxes for highlighting important information:
+	
+	\begin{conceptbox}
+		\textbf{Concept Box (Green):} Use this for explaining fundamental concepts or theoretical background. This helps readers grasp key ideas that are essential for understanding the main content.
+	\end{conceptbox}
+	
+	\begin{notebox}
+		\textbf{Note Box (Blue):} Use this for important notes, observations, or additional information that complements the main text but isn't critical to the narrative flow.
+	\end{notebox}
+	
+	\begin{highlightbox}
+		\textbf{Highlight Box (Yellow):} Use this to emphasize key findings, important results, or take-home messages that you want readers to remember.
+	\end{highlightbox}
+	
+	\begin{cautionbox}
+		\textbf{Caution Box (Red):} Use this for warnings, common pitfalls, safety considerations, or important limitations that readers should be aware of.
+	\end{cautionbox}
+	
+	\subsection{Cross-References} Use LaTeX's built-in referencing system. Label equations, figures, tables, and sections, then reference them using \texttt{\textbackslash ref\{\}} or \texttt{\textbackslash eqref\{\}} for equations.
+	
+	\section{Citations and Bibliography}
+	
+	\subsection{Citation Style} Use numerical citations in superscript format following ACS style. The natbib package is configured with the \texttt{numbers,super,sort\&compress} options. Multiple citations are automatically compressed (e.g., 1-3 instead of 1,2,3).
+	
+	\subsection{Bibliography File} Prepare your references in BibTeX format. Use the achemso bibliography style for consistency with ACS journals. Include DOIs for all references where available.
+	
+	\section{Required Files}
+	
+	\subsection{Image Files} Your submission must include: (1) \texttt{logodec\_updated.pdf} - the newsletter logo, (2) \texttt{orcid.pdf} - ORCID icon, (3) \texttt{ccby.pdf} - Creative Commons icon, and (4) all figure files referenced in your manuscript. These files must be in the same directory as your .tex file.
+	
+	\subsection{Metadata} Complete all metadata fields at the top of the template, including volume number (\texttt{\textbackslash malar}), issue number (\texttt{\textbackslash petal}), year, article type, title, authors, affiliations, keywords, and citation information. The DOI will be assigned by the editorial team.
+	
+	\section{Submission Checklist}
+	
+	Before submitting your manuscript, ensure you have:
+	
+	\begin{itemize}
+		\item Compiled successfully with LuaLaTeX
+		\item Completed all metadata fields with accurate information
+		\item Provided ORCID, email, Google Scholar, and LinkedIn for all authors
+		\item Included all required image files (logo, icons, figures)
+		\item Written an abstract of 150-250 words
+		\item Provided 5-8 relevant keywords
+		\item Formatted all chemical formulas using mhchem
+		\item Numbered and referenced all equations, figures, and tables
+		\item Used colored boxes appropriately for emphasis
+		\item Prepared bibliography in BibTeX format with DOIs
+		\item Checked for compilation errors and warnings
+		\item Reviewed the two-column layout for proper formatting
+		\item Ensured all hyperlinks are functional
+	\end{itemize}
+	
+	\section{Editorial Process}
+	
+	\subsection{Submission} Submit your complete manuscript package including the .tex file, bibliography file, and all image files to the editorial team at catalysiseducation@gmail.com.
+	
+	\subsection{Review} All submissions undergo editorial review. The editors may provide feedback and request revisions to improve clarity, accuracy, or pedagogical value.
+	
+	\subsection{Publication} Accepted articles are published online with a DOI and made freely available under CC BY-NC 4.0 license. Authors retain copyright while granting the newsletter distribution rights.
+	
+	\section{Best Practices}
+	
+	\subsection{Writing Style} Write clearly and concisely for an educational audience. Define technical terms on first use. Use active voice where possible. Break complex ideas into digestible sections. Include examples and applications to illustrate concepts.
+	
+	\subsection{Figures} Create high-quality figures with readable labels and legends. Use consistent color schemes and fonts. Ensure figures are publication-quality (minimum 300 dpi for raster images). Prefer vector graphics (PDF, SVG) when possible.
+	
+	\subsection{Accessibility} Consider accessibility in your writing. Describe figure content in captions. Avoid relying solely on color to convey information. Use clear, descriptive headings. Provide context for equations and symbols.
+	
+	\section{Contact Information}
+	
+	For questions about the template, submission process, or editorial policies, contact the editorial team at catalysiseducation@gmail.com. Additional resources and updates are available at \url{https://catalysiseducation.substack.com/}.
+	
+	\section*{AI Disclosure}
+	If you used AI tools for literature search, writing assistance, or data analysis, please disclose this in an "AI Disclosure" section before the Author Information. Specify which tools were used and for what purposes.
+	
+	\section*{Author Information}
+	
+	\begin{tcolorbox}[
+		colback=contextbg,
+		colframe=catalysisblue,
+		boxrule=1pt,
+		arc=3pt,
+		left=8pt,
+		right=8pt,
+		top=8pt,
+		bottom=8pt
+		]
+		
+		\textbf{Jane A. Doe}  \\
+		Position Title \\ Department/Division\\ Institution Name\\ City, State/Province, Country Postal Code
+		
+		ORCID: \orcid{0000-0000-0000-0001} \\
+		Email:  \href{mailto:jane.doe@university.edu}{\faEnvelope}  \\
+		Google Scholar:  \href{https://scholar.google.com/citations?user=XXXXXX}{\faGraduationCap}  \\
+		LinkedIn: \href{https://www.linkedin.com/in/jane-doe}{\faLinkedin}
+		
+		\vspace{0.4cm}
+		
+		\textbf{John B. Smith}   
+		
+		Position Title \\ Department/Division\\ Institution Name\\ City, State/Province, Country Postal Code
+		
+		ORCID: \orcid{0000-0000-0000-0002} \\
+		Email:  \href{mailto:john.smith@institute.org}{\faEnvelope}  \\
+		Google Scholar:  \href{https://scholar.google.com/citations?user=YYYYYY}{\faGraduationCap}  \\
+		LinkedIn: \href{https://www.linkedin.com/in/john-smith}{\faLinkedin}
+		
+	\end{tcolorbox}
+	
+	% Bibliography
+	% Uncomment and modify when you have references:
+	% \bibliographystyle{achemso}
+	% \bibliography{references}
+	
+\end{document}

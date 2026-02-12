@@ -1,0 +1,78 @@
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.bcf
+*.run.xml
+*.xdv
+
+# BibTeX files (keep .bib but ignore generated files)
+*.bbl
+*.blg
+
+# Glossary files
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+
+# Index files
+*.idx
+*.ilg
+*.ind
+
+# Nomenclature
+*.nlo
+*.nls
+
+# Temporary files
+*.backup
+*.bak
+*.swp
+*~
+*.tmp
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+*.sublime-project
+*.sublime-workspace
+.vscode/
+.idea/
+*.code-workspace
+
+# LaTeX distribution files
+auto/
+_minted*/
+
+# Output files (uncomment if you don't want to track PDFs)
+# *.pdf
+
+# Latexmk
+*.fdb_latexmk
+
+# Build directories
+build/
+output/
+dist/
+
+# Package manager files (if using)
+node_modules/
