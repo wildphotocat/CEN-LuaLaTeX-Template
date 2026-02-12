@@ -1,0 +1,87 @@
+name: Build LaTeX Template
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Install TeX Live
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-full
+        
+    - name: Verify LuaLaTeX installation
+      run: |
+        lualatex --version
+        
+    - name: Update font cache
+      run: |
+        luaotfload-tool --update --force
+        
+    - name: Create dummy image files (for testing)
+      run: |
+        # Create minimal PDF files for testing
+        echo "%PDF-1.4" > logodec_updated.pdf
+        echo "%PDF-1.4" > orcid.pdf
+        echo "%PDF-1.4" > ccby.pdf
+        
+    - name: Compile LaTeX template (first pass)
+      run: |
+        lualatex -interaction=nonstopmode catalysis_education_template.tex || true
+        
+    - name: Run BibTeX
+      run: |
+        bibtex catalysis_education_template || true
+        
+    - name: Compile LaTeX template (second pass)
+      run: |
+        lualatex -interaction=nonstopmode catalysis_education_template.tex || true
+        
+    - name: Compile LaTeX template (final pass)
+      run: |
+        lualatex -interaction=nonstopmode catalysis_education_template.tex
+        
+    - name: Check for PDF output
+      run: |
+        if [ -f "catalysis_education_template.pdf" ]; then
+          echo "✓ PDF generated successfully"
+          ls -lh catalysis_education_template.pdf
+        else
+          echo "✗ PDF generation failed"
+          exit 1
+        fi
+        
+    - name: Check for compilation errors
+      run: |
+        if grep -i "^!" catalysis_education_template.log; then
+          echo "✗ Compilation errors found:"
+          grep -i "^!" catalysis_education_template.log
+          exit 1
+        else
+          echo "✓ No compilation errors"
+        fi
+        
+    - name: Upload PDF artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: compiled-template
+        path: catalysis_education_template.pdf
+        retention-days: 30
+        
+    - name: Upload log file
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: compilation-log
+        path: catalysis_education_template.log
+        retention-days: 7
