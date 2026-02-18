@@ -1,7 +1,7 @@
 # Catalysis Education Newsletter - LaTeX Template
 
 ![Version](https://img.shields.io/badge/version-4.0-blue)
-![License](https://img.shields.io/badge/license-CC--BY--NC--4.0-green)
+![License](https://img.shields.io/badge/license-CC--BY--SA--4.0-green)
 ![LaTeX](https://img.shields.io/badge/LaTeX-LuaLaTeX-orange)
 
 Official LaTeX template for submitting articles to the **Catalysis Education Newsletter**.
@@ -402,7 +402,7 @@ We welcome contributions to improve this template!
 
 ## 📄 License
 
-This template is licensed under **CC BY-NC 4.0** (Creative Commons Attribution-NonCommercial 4.0 International).
+This template is licensed under **CC BY-SA 4.0** (Creative Commons Attribution-ShareAlike 4.0 International).
 
 You are free to:
 - **Share** — copy and redistribute the template
