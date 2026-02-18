@@ -1,4 +1,4 @@
-# Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+# Creative Commons Attribution-NonCommercial 4.0 International (CC BY-SA 4.0)
 
 This is a human-readable summary of (and not a substitute for) the license.
 
@@ -47,7 +47,7 @@ When using this template, please provide attribution as follows:
   year = {2026},
   version = {4.0},
   url = {https://github.com/catalysis-education/latex-template},
-  note = {Licensed under CC BY-NC 4.0}
+  note = {Licensed under CC BY-SA 4.0}
 }
 ```
 
